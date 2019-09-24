@@ -1,14 +1,14 @@
 import numpy as np
 
-from jass.base.const import color_masks
 from jass.base.player_round import PlayerRound
 from jass.player.player import Player
-
+import RuleBasedPlayer.rbp_trump as rbp_trump
 
 class RuleBasedPlayer(Player):
     """
-    Sample implementation of a player to play Jass.
+    Rule Based implementation of a player to play Jass.
     """
+
     def select_trump(self, rnd: PlayerRound) -> int:
         """
         Player chooses a trump based on the given round information.
@@ -23,14 +23,7 @@ class RuleBasedPlayer(Player):
         print(rnd.hand)
         print(rnd.hand.shape)
 
-        trump = 0
-        max_number_in_color = 0
-        for c in range(4):
-            number_in_color = (rnd.hand * color_masks[c]).sum()
-            if number_in_color > max_number_in_color:
-                max_number_in_color = number_in_color
-                trump = c
-        return trump
+        return rbp_trump.select_by_best_wins(rnd)
 
     def play_card(self, rnd: PlayerRound) -> int:
         """
