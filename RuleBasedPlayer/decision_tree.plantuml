@@ -1,0 +1,41 @@
+@startuml DecisionTree
+
+[*] --> InitialState
+InitialState : More than one valid card?
+
+InitialState --> FirstOrAlreadyPlayed : More than one possible card
+InitialState --> PlayValidCard : Only one card left
+
+PlayValidCard --> [*]
+
+FirstOrAlreadyPlayed --> FirstPlayer : Nobody played so far
+FirstOrAlreadyPlayed --> AlreadyPlayed : Somebody played already
+
+FirstPlayer --> PerfectWin
+FirstPlayer --> LowestCardOfColorWithHighestScore
+
+PerfectWin --> [*]
+LowestCardOfColorWithHighestScore --> [*]
+
+AlreadyPlayed --> TeamMemberPlayed
+AlreadyPlayed --> OpponentPlayed
+
+TeamMemberPlayed --> IsPerfectWinFromTeam
+IsPerfectWinFromTeam --> CardSchmereOrLowestCard
+
+CardSchmereOrLowestCard --> [*]
+
+IsPerfectWinFromTeam --> PerfectWinCardAvailable
+PerfectWinCardAvailable --> PerfectWinIfAvailable
+PerfectWinCardAvailable --> LowestPossibleCardOfWeakestColor
+
+PerfectWinIfAvailable --> [*]
+LowestPossibleCardOfWeakestColor --> [*]
+
+OpponentPlayed --> PerfectWinOpponent
+OpponentPlayed --> LowestPossibleCardOfWekestColorOpponent
+
+PerfectWinOpponent --> [*]
+LowestPossibleCardOfWekestColorOpponent --> [*]
+
+@enduml
