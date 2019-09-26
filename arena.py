@@ -19,7 +19,7 @@ def main():
     rule_based_player = RuleBasedPlayer()
 
     arena.set_players(random_choice_player, rule_based_player, random_choice_player, rule_based_player)
-    arena.nr_games_to_play = 1
+    arena.nr_games_to_play = 10
     print('Playing {} games'.format(arena.nr_games_to_play))
     arena.play_all_games()
     total_games = arena.nr_wins_team_0 + arena.nr_wins_team_1 + arena.nr_draws
@@ -27,7 +27,6 @@ def main():
     print('Wins Team 1: {} ({:.2f}%)'.format(arena.nr_wins_team_1, arena.nr_wins_team_1 / total_games))
     print('Draws: {} ({:.2f}%)'.format(arena.nr_draws, arena.nr_draws / total_games))
     print('Delta Points: {}'.format(arena.delta_points))
-
 
 if __name__ == '__main__':
     main()
