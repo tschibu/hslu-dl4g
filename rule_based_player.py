@@ -24,7 +24,7 @@ class RuleBasedPlayer(Player):
         print(rnd.hand)
         print(rnd.hand.shape)
 
-        return rbp_trump.select_by_best_wins(rnd)
+        return rbp_trump.select_by_best_score(rnd)
 
     def play_card(self, rnd: PlayerRound) -> int:
         """
