@@ -18,7 +18,7 @@ def main():
     random_choice_player = RandomChoicePlayer()
     rule_based_player = RuleBasedPlayer()
 
-    arena.set_players(random_choice_player, rule_based_player, random_choice_player, rule_based_player)
+    arena.set_players(random_choice_player, random_choice_player, random_choice_player, random_choice_player)
     arena.nr_games_to_play = 10
     print('Playing {} games'.format(arena.nr_games_to_play))
     arena.play_all_games()

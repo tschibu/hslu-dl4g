@@ -1,7 +1,7 @@
 import unittest
 
 import numpy as np
-import RuleBasedPlayer.rbp_trump as rbp
+import RuleBasedPlayer.rbp_score as score
 
 #Trump Combinations ----------------A--K--Q--J-10--9--8--7--6
 #Indexes----------------------------0--1--2--3--4--5--6--7--8
@@ -40,56 +40,56 @@ class RuleBasePlayerTest(unittest.TestCase):
 
     def test_get_wins_trump_when_no_trump(self):
         """We have no trump :("""
-        self.assertTrue(-45 == rbp.get_wins_trump_single_color(NO_TRUMP_ARRAY))
+        self.assertTrue(-45 == score.get_wins_trump_single_color(NO_TRUMP_ARRAY))
 
     def test_get_wins_trump_when_only_J_trump(self):
-        self.assertTrue(-27 == rbp.get_wins_trump_single_color(J_TRUMP_ARRAY))
+        self.assertTrue(-27 == score.get_wins_trump_single_color(J_TRUMP_ARRAY))
 
     def test_get_wins_trump_when_J_9_trump(self):
-        self.assertTrue(-11 == rbp.get_wins_trump_single_color(J_9_TRUMP_ARRAY))
+        self.assertTrue(-11 == score.get_wins_trump_single_color(J_9_TRUMP_ARRAY))
 
     def test_get_wins_trump_when_J_9_A_trump(self):
-        self.assertTrue(3 == rbp.get_wins_trump_single_color(J_9_A_TRUMP_ARRAY))
+        self.assertTrue(3 == score.get_wins_trump_single_color(J_9_A_TRUMP_ARRAY))
 
     def test_get_wins_trump_when_J_9_A_10_trump(self):
-        self.assertTrue(11 == rbp.get_wins_trump_single_color(J_9_A_10_TRUMP_ARRAY))
+        self.assertTrue(11 == score.get_wins_trump_single_color(J_9_A_10_TRUMP_ARRAY))
 
     def test_get_wins_trump_when_A_10_8_7_6_trump(self):
-        self.assertTrue(-11 == rbp.get_wins_trump_single_color(A_10_8_7_6_TRUMP_ARRAY))
+        self.assertTrue(-11 == score.get_wins_trump_single_color(A_10_8_7_6_TRUMP_ARRAY))
 
     def test_get_wins_trump_when_A_10_8_7_trump(self):
-        self.assertTrue(-13 == rbp.get_wins_trump_single_color(A_10_8_7_TRUMP_ARRAY))
+        self.assertTrue(-13 == score.get_wins_trump_single_color(A_10_8_7_TRUMP_ARRAY))
 
     def test_get_wins_trump_when_A_10_8_trump(self):
-        self.assertTrue(-17 == rbp.get_wins_trump_single_color(A_10_8_TRUMP_ARRAY))
+        self.assertTrue(-17 == score.get_wins_trump_single_color(A_10_8_TRUMP_ARRAY))
 
     # Obe Wins Tests
 
     def test_get_wins_obe_one_color_good(self):
-        self.assertTrue(9 == rbp.get_wins_obe(OBE_ONE_COLOR_GOOD))
+        self.assertTrue(9 == score.get_wins_obe(OBE_ONE_COLOR_GOOD))
 
     def test_get_wins_obe_two_color_good(self):
-        self.assertTrue(18 == rbp.get_wins_obe(OBE_TWO_COLOR_GOOD))
+        self.assertTrue(18 == score.get_wins_obe(OBE_TWO_COLOR_GOOD))
 
     def test_get_wins_obe_one_color_bad(self):
-        self.assertTrue(-9 == rbp.get_wins_obe(OBE_ONE_COLOR_BAD))
+        self.assertTrue(-9 == score.get_wins_obe(OBE_ONE_COLOR_BAD))
 
     def test_get_wins_obe_two_color_bad(self):
-        self.assertTrue(-18 == rbp.get_wins_obe(OBE_TWO_COLOR_BAD))
+        self.assertTrue(-18 == score.get_wins_obe(OBE_TWO_COLOR_BAD))
 
     # Unde Wins Tests
 
     def test_get_wins_unde_one_color_good(self):
-        self.assertTrue(9 == rbp.get_wins_onde(UNDE_ONE_COLOR_GOOD))
+        self.assertTrue(9 == score.get_wins_onde(UNDE_ONE_COLOR_GOOD))
 
     def test_get_wins_unde_two_color_good(self):
-        self.assertTrue(18 == rbp.get_wins_onde(UNDE_TWO_COLOR_GOOD))
+        self.assertTrue(18 == score.get_wins_onde(UNDE_TWO_COLOR_GOOD))
 
     def test_get_wins_unde_one_color_bad(self):
-        self.assertTrue(-9 == rbp.get_wins_onde(UNDE_ONE_COLOR_BAD))
+        self.assertTrue(-9 == score.get_wins_onde(UNDE_ONE_COLOR_BAD))
 
     def test_get_wins_unde_two_color_bad(self):
-        self.assertTrue(-18 == rbp.get_wins_onde(UNDE_TWO_COLOR_BAD))
+        self.assertTrue(-18 == score.get_wins_onde(UNDE_TWO_COLOR_BAD))
 
 
 if __name__ == 'main':
