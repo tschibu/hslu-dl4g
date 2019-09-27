@@ -3,6 +3,7 @@ import numpy as np
 from jass.base.player_round import PlayerRound
 from jass.player.player import Player
 import RuleBasedPlayer.rbp_trump as rbp_trump
+import RuleBasedPlayer.rbp_play as rbp_play
 
 class RuleBasedPlayer(Player):
     """
@@ -35,10 +36,5 @@ class RuleBasedPlayer(Player):
         Returns:
             card to play, int encoded
         """
-        # play random
 
-        # get the valid cards to play
-        valid_cards = rnd.get_valid_cards()
-
-        # select a random card
-        return np.random.choice(np.flatnonzero(valid_cards))
+        return rbp_play.play_card(rnd)
