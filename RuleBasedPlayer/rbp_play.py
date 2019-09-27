@@ -44,24 +44,30 @@ def check_is_first_player(rnd: PlayerRound) -> bool:
     return rnd.current_trick.sum() == -4 #nobody played so far
 
 def check_has_perfect_card(rnd: PlayerRound) -> bool:
+    #TODO implement check_has_perfect_card
     return False
 
 def check_has_teammember_played(rnd: PlayerRound) -> bool:
     return (np.count_nonzero(rnd.current_trick == -1) > 2)
 
 def check_perfect_card_from_teammember(rnd: PlayerRound) -> bool:
+    #TODO implement check_perfect_card_from_teammember
     return False
 
 def play_perfect_win(rnd: PlayerRound) -> int:
+    #TODO implement play_perfect_win
     return 0
 
 def play_lowest_card_with_highest_score(rnd: PlayerRound) -> int:
+    #TODO implement play_lowest_card_with_highest_score
     return 0
 
 def play_schmere_or_lowest_card(rnd: PlayerRound) -> int:
+    #TODO implement play_schmere_or_lowest_card
     return 0
 
 def play_lowest_card_of_weakest_color(rnd: PlayerRound) -> int:
+    #TODO implement play_lowest_card_of_weakest_color
     return 0
 
 def play_last_valid_card(rnd: PlayerRound) -> int:
