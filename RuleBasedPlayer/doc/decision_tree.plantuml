@@ -1,0 +1,37 @@
+@startuml RuleBasedPlayerDecisionTree
+
+start
+
+if (More than one valid card?) then (yes)
+  if (First Player?) then (yes)
+    if (Perfect Win Card?) then (yes)
+        : Play Perfect Win ;
+    else (no)
+        : Play lowest Card of Color with highest Score ;
+    endif
+  else (no)
+    if (Teammember played?) then (yes)
+      if (Perfect win from teammeber?) then (yes)
+        : Schmere or Lowest Card ;
+      else (no)
+        if (Perfect Win Card?) then (yes)
+          : Play Perfect Win ;
+        else (no)
+          : Lowest Card of weakest Color ;
+        endif
+      endif
+    else (no)
+      if (Perfect Win Card?) then (yes)
+        : Play Perfect Win ;
+      else (no)
+        : Lowest Card of weakest Color ;
+      endif
+    endif
+  endif
+else (no)
+  : Play last valid card ;
+endif
+
+stop
+
+@enduml
