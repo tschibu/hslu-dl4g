@@ -72,7 +72,7 @@ def check_has_perfect_card(rnd: PlayerRound) -> bool:
     return False
 
 def check_has_teammember_played(rnd: PlayerRound) -> bool:
-    return (np.count_nonzero(rnd.current_trick == -1) > 2)
+    return (np.count_nonzero(rnd.current_trick == -1) > 1)
 
 def check_perfect_card_from_teammember(rnd: PlayerRound) -> bool:
     #TODO implement check_perfect_card_from_teammember
