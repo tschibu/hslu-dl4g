@@ -106,42 +106,62 @@ def get_score_per_color_and_trump(hand: np.array, color: int, trumpType: int) ->
     score = 0
     score_value = START_SCORE
 
+    perfect_wins = 0
+    count_perfect_wins = True
+
     if trumpType == 0:
         #check trump
         for i in range(0, BEST_TRUMP_INDEXES.size):
             if cards_of_color[BEST_TRUMP_INDEXES[i]] == 1:
                 score = score + score_value
+
+                if count_perfect_wins:
+                    perfect_wins = perfect_wins + 1
             else:
+                count_perfect_wins = False
                 score = score - score_value
 
             score_value = score_value + SCORE_STEP
 
-        return score
+        return (score + (perfect_wins * PERFECT_WINS_FACTOR))
 
     elif trumpType == 1:
         #check obe
+        perfect_wins = 0
+        count_perfect_wins = True
+
         for v in cards_of_color:
             if v == 1:
                 score = score + score_value
+
+                if count_perfect_wins:
+                    perfect_wins = perfect_wins + 1
             else:
+                count_perfect_wins = False
                 score = score - score_value
 
             score_value = score_value + SCORE_STEP
 
-        return score
+        return (score + (perfect_wins * PERFECT_WINS_FACTOR))
 
     elif trumpType == 2:
         #check onde
+        perfect_wins = 0
+        count_perfect_wins = True
 
         for v in np.flip(cards_of_color):
             if v == 1:
                 score = score + score_value
+
+                if count_perfect_wins:
+                    perfect_wins = perfect_wins + 1
             else:
+                count_perfect_wins = False
                 score = score - score_value
 
             score_value = score_value + SCORE_STEP
 
-        return score
+        return (score + (perfect_wins * PERFECT_WINS_FACTOR))
 
 #Card calculations
 def calculate_highest_card_per_color(rnd: PlayerRound) -> np.array:
@@ -210,19 +230,19 @@ def calculate_score(rnd: PlayerRound) -> int:
         SCORE_PER_COLOR[1] = get_score_per_color_and_trump(rnd.hand, 1, 1)
         SCORE_PER_COLOR[2] = get_score_per_color_and_trump(rnd.hand, 2, 1)
         SCORE_PER_COLOR[3] = get_score_per_color_and_trump(rnd.hand, 3, 1)
-    elif rnd.trump == 0:
+    elif rnd.trump == 1:
         #it's a H trump
         SCORE_PER_COLOR[0] = get_score_per_color_and_trump(rnd.hand, 0, 1)
         SCORE_PER_COLOR[1] = get_score_per_color_and_trump(rnd.hand, 1, 0)
         SCORE_PER_COLOR[2] = get_score_per_color_and_trump(rnd.hand, 2, 1)
         SCORE_PER_COLOR[3] = get_score_per_color_and_trump(rnd.hand, 3, 1)
-    elif rnd.trump == 0:
+    elif rnd.trump == 2:
         #it's a S trump
         SCORE_PER_COLOR[0] = get_score_per_color_and_trump(rnd.hand, 0, 1)
         SCORE_PER_COLOR[1] = get_score_per_color_and_trump(rnd.hand, 1, 1)
         SCORE_PER_COLOR[2] = get_score_per_color_and_trump(rnd.hand, 2, 0)
         SCORE_PER_COLOR[3] = get_score_per_color_and_trump(rnd.hand, 3, 1)
-    elif rnd.trump == 0:
+    elif rnd.trump == 3:
         #it's a C trump
         SCORE_PER_COLOR[0] = get_score_per_color_and_trump(rnd.hand, 0, 1)
         SCORE_PER_COLOR[1] = get_score_per_color_and_trump(rnd.hand, 1, 1)
@@ -251,10 +271,10 @@ def calculate_next_best_card(rnd: PlayerRound) -> np.array:
             NEXT_BEST_CARD_PER_COLOR[c] = (c*9) + get_highest_trump(cards)
         elif rnd.trump == 5:
             #check highest unde
-            NEXT_BEST_CARD_PER_COLOR[c] = (c*9) + get_highest_obe(cards)
+            NEXT_BEST_CARD_PER_COLOR[c] = (c*9) + get_highest_unde(cards)
         else:
             #check highest obe
-            NEXT_BEST_CARD_PER_COLOR[c] = (c*9) + get_highest_unde(cards)
+            NEXT_BEST_CARD_PER_COLOR[c] = (c*9) + get_highest_obe(cards)
 
     return NEXT_BEST_CARD_PER_COLOR
 
