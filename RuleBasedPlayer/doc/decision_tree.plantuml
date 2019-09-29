@@ -7,7 +7,11 @@ if (More than one valid card?) then (yes)
     if (Perfect Win Card?) then (yes)
         : Play Perfect Win ;
     else (no)
-        : Play lowest Card of Color with highest Score ;
+        if (Trump available?) then (yes)
+          : Play Trump ;
+        else (no)
+          : Lowest Card of weakest Color ;
+        endif
     endif
   else (no)
     if (Teammember played?) then (yes)
@@ -17,14 +21,30 @@ if (More than one valid card?) then (yes)
         if (Perfect Win Card?) then (yes)
           : Play Perfect Win ;
         else (no)
-          : Lowest Card of weakest Color ;
+          if (Trump available?) then (yes)
+            if (Enough points?) then (yes)
+              : Play Trump ;
+            else (no)
+              : Lowest Card of weakest Color ;
+            endif
+          else (no)
+            : Lowest Card of weakest Color ;
+          endif
         endif
       endif
     else (no)
       if (Perfect Win Card?) then (yes)
         : Play Perfect Win ;
       else (no)
-        : Lowest Card of weakest Color ;
+        if (Trump available?) then (yes)
+          if (Enough points?) then (yes)
+            : Play Trump ;
+          else (no)
+            : Lowest Card of weakest Color ;
+          endif
+        else (no)
+          : Lowest Card of weakest Color ;
+        endif
       endif
     endif
   endif

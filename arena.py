@@ -19,7 +19,7 @@ def main():
     rule_based_player = RuleBasedPlayer()
 
     arena.set_players(random_choice_player, rule_based_player, random_choice_player, rule_based_player)
-    arena.nr_games_to_play = 100
+    arena.nr_games_to_play = 1
     print('Playing {} games'.format(arena.nr_games_to_play))
     arena.play_all_games()
     total_games = arena.nr_wins_team_0 + arena.nr_wins_team_1 + arena.nr_draws

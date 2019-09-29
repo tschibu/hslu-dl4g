@@ -169,13 +169,13 @@ def calculate_highest_card_per_color(rnd: PlayerRound) -> np.array:
         cards = rnd.hand[c*9:(c*9)+9]
         if c == rnd.trump:
             #check highest trump
-            HIGHEST_CARD_PER_COLOR[c] = (c*9) + get_highest_trump(cards)
+            HIGHEST_CARD_PER_COLOR[c] = get_highest_trump(c, cards)
         elif rnd.trump == 5:
             #check highest unde
-            HIGHEST_CARD_PER_COLOR[c] = (c*9) + get_highest_unde(cards)
+            HIGHEST_CARD_PER_COLOR[c] = get_highest_unde(c, cards)
         else:
             #check highest obe
-            HIGHEST_CARD_PER_COLOR[c] = (c*9) + get_highest_obe(cards)
+            HIGHEST_CARD_PER_COLOR[c] = get_highest_obe(c, cards)
 
     return HIGHEST_CARD_PER_COLOR
 
@@ -184,41 +184,44 @@ def calculate_lowest_card_per_color(rnd: PlayerRound) -> np.array:
         cards = rnd.hand[c*9:(c*9)+9]
         if c == rnd.trump:
             #check lowest trump
-            LOWEST_CARD_PER_COLOR[c] = (c*9) + get_lowest_trump(cards)
+            LOWEST_CARD_PER_COLOR[c] = get_lowest_trump(c, cards)
         elif rnd.trump == 5:
             #check lowest unde
-            LOWEST_CARD_PER_COLOR[c] = (c*9) + get_lowest_unde(cards)
+            LOWEST_CARD_PER_COLOR[c] = get_lowest_unde(c, cards)
         else:
             #check lowest obe
-            LOWEST_CARD_PER_COLOR[c] = (c*9) + get_lowest_obe(cards)
+            LOWEST_CARD_PER_COLOR[c] = get_lowest_obe(c, cards)
 
     return LOWEST_CARD_PER_COLOR
 
-def get_highest_trump(cards_of_color: np.array) -> int:
-    return __get_card_index_by_color(cards_of_color, BEST_TRUMP_INDEXES)
+def get_highest_trump(color_index: int, cards_of_color: np.array) -> int:
+    return __get_card_index_by_color(color_index, cards_of_color, BEST_TRUMP_INDEXES)
 
-def get_lowest_trump(cards_of_color: np.array) -> int:
-    return __get_card_index_by_color(cards_of_color, np.flip(BEST_TRUMP_INDEXES))
+def get_lowest_trump(color_index: int, cards_of_color: np.array) -> int:
+    return __get_card_index_by_color(color_index, cards_of_color, np.flip(BEST_TRUMP_INDEXES))
 
-def get_highest_obe(cards_of_color: np.array) -> int:
-    return __get_card_index_by_color(cards_of_color, BEST_OBE_INDEXES)
+def get_highest_obe(color_index: int, cards_of_color: np.array) -> int:
+    return __get_card_index_by_color(color_index, cards_of_color, BEST_OBE_INDEXES)
 
-def get_lowest_obe(cards_of_color: np.array) -> int:
-    return __get_card_index_by_color(cards_of_color, np.flip(BEST_OBE_INDEXES))
+def get_lowest_obe(color_index: int, cards_of_color: np.array) -> int:
+    return __get_card_index_by_color(color_index, cards_of_color, np.flip(BEST_OBE_INDEXES))
 
-def get_highest_unde(cards_of_color: np.array) -> int:
-    return get_lowest_obe(cards_of_color)
+def get_highest_unde(color_index: int, cards_of_color: np.array) -> int:
+    return get_lowest_obe(color_index, cards_of_color)
 
-def get_lowest_unde(cards_of_color: np.array) -> int:
-    return get_highest_obe(cards_of_color)
+def get_lowest_unde(color_index: int, cards_of_color: np.array) -> int:
+    return get_highest_obe(color_index, cards_of_color)
 
-def __get_card_index_by_color(cards_of_color: np.array, index_order: np.array) -> int:
+def __get_card_index_by_color(color_index: int, cards_of_color: np.array, index_order: np.array) -> int:
     """
     gets the index of a color by its index order (to find best or worst color)
     """
+    if color_index < 0 or color_index > 3:
+        ValueError("color_index has to be within 0 and 3")
+
     for index in index_order:
         if cards_of_color[index] == 1:
-            return index
+            return index + (color_index * 9)
 
     return -1 #no cards of this color anymore
 
@@ -263,27 +266,33 @@ def calculate_score(rnd: PlayerRound) -> int:
 
 #Next best card
 def calculate_next_best_card(rnd: PlayerRound) -> np.array:
-    __set_played_and_missing_cards(rnd.tricks)
+    cards_missing = get_missing_cards(rnd.tricks)
+    print("Missing Cards: {}".format(cards_missing))
     for c in range(0, 4):
-        cards = CARDS_MISSING[c*9:(c*9)+9]
+        cards = cards_missing[c*9:(c*9)+9]
         if c == rnd.trump:
             #check highest trump
-            NEXT_BEST_CARD_PER_COLOR[c] = (c*9) + get_highest_trump(cards)
+            NEXT_BEST_CARD_PER_COLOR[c] = get_highest_trump(c, cards)
         elif rnd.trump == 5:
             #check highest unde
-            NEXT_BEST_CARD_PER_COLOR[c] = (c*9) + get_highest_unde(cards)
+            NEXT_BEST_CARD_PER_COLOR[c] = get_highest_unde(c, cards)
         else:
             #check highest obe
-            NEXT_BEST_CARD_PER_COLOR[c] = (c*9) + get_highest_obe(cards)
+            NEXT_BEST_CARD_PER_COLOR[c] = get_highest_obe(c, cards)
 
     return NEXT_BEST_CARD_PER_COLOR
 
-def __set_played_and_missing_cards(tricks: np.array):
+def get_missing_cards(tricks: np.array):
+    missing_cards = np.array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+
     for trick in tricks:
         for card in trick:
             if card != -1:
-                CARDS_PLAYED[card] = 1
-                CARDS_MISSING[card] = 0
-            else:
-                CARDS_PLAYED[card] = 0
-                CARDS_MISSING[card] = 1
+                missing_cards[card] = 1
+
+    # as we calculated first the played cards we switch 0 and 1
+    missing_cards[missing_cards == 1] = -1
+    missing_cards[missing_cards == 0] = 1
+    missing_cards[missing_cards == -1] = 0
+
+    return missing_cards
