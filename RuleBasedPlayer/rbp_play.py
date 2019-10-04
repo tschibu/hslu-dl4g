@@ -4,7 +4,7 @@ from jass.base.const import card_values
 from jass.base.player_round import PlayerRound
 import RuleBasedPlayer.rbp_score as score
 
-MINIMUM_POINTS_FOR_TRUMP = 7
+MINIMUM_POINTS_FOR_TRUMP = 2
 
 def play_card(rnd: PlayerRound) -> int:
     """
@@ -104,6 +104,7 @@ def check_enough_points(rnd: PlayerRound) -> bool:
             points = points + card_values[rnd.trump][card_index]
 
     if points >= MINIMUM_POINTS_FOR_TRUMP:
+        print("Enough points - play Trump! Points: {}".format(points))
         return True
     else:
         return False
@@ -252,6 +253,7 @@ def play_lowest_card_with_highest_score(rnd: PlayerRound) -> int:
         score.LOWEST_CARD_PER_COLOR[color_to_play] == -1):
         raise ValueError("Color to Play has to be within 0 and 3 and Card != -1!")
 
+    print("Playing lowest card of Best Color! Color: {}, Card: {}, Scores: {}".format(color_to_play, score.LOWEST_CARD_PER_COLOR[color_to_play], score.SCORE_PER_COLOR))
     return score.LOWEST_CARD_PER_COLOR[color_to_play]
 
 def play_schmere_or_lowest_card(rnd: PlayerRound) -> int:
@@ -266,6 +268,7 @@ def play_lowest_card_of_weakest_color(rnd: PlayerRound) -> int:
     for s in score.SCORE_PER_COLOR:
         if score.LOWEST_CARD_PER_COLOR[color_index] == -1:
             color_index = color_index + 1
+            print("No card of Color: {}".format(color_index))
             continue #no card in this color...continue...
 
         #check the score and set color to play
@@ -279,6 +282,7 @@ def play_lowest_card_of_weakest_color(rnd: PlayerRound) -> int:
         score.LOWEST_CARD_PER_COLOR[color_to_play] == -1):
         raise ValueError("Color to Play has to be within 0 and 3 and Card != -1!")
 
+    print("Playing lowest card of Weakest Color! Color: {}, Card: {}, Scores: {}".format(color_to_play, score.LOWEST_CARD_PER_COLOR[color_to_play], score.SCORE_PER_COLOR))
     return score.LOWEST_CARD_PER_COLOR[color_to_play]
 
 def play_last_valid_card(rnd: PlayerRound) -> int:
@@ -294,6 +298,7 @@ def play_trump(rnd: PlayerRound) -> int:
     if trump == -1:
         raise ValueError("Invalid Trump: Check first if trump is available!")
 
+    print("Playing Trump! Trump: {}".format(trump))
     return trump
 
 def get_partner_index(myindex: int) -> int:
