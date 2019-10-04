@@ -58,7 +58,7 @@ def get_score_trump_single_color(hand: np.array) -> int:
                 perfect_wins = perfect_wins + 1
         else:
             count_perfect_wins = False #stop counting perfect wins
-            score = score - score_value
+            #score = score - score_value
 
         score_value = score_value + SCORE_STEP
 
@@ -84,7 +84,7 @@ def get_score_obe(hand: np.array) -> int:
                     perfect_wins = perfect_wins + 1
             else:
                 count_perfect_wins = False #stop counting perfect wins
-                score = score - score_value
+                #score = score - score_value
 
             score_value = score_value + SCORE_STEP
 
@@ -119,7 +119,7 @@ def get_score_per_color_and_trump(hand: np.array, color: int, trumpType: int) ->
                     perfect_wins = perfect_wins + 1
             else:
                 count_perfect_wins = False
-                score = score - score_value
+                #score = score - score_value
 
             score_value = score_value + SCORE_STEP
 
@@ -138,7 +138,7 @@ def get_score_per_color_and_trump(hand: np.array, color: int, trumpType: int) ->
                     perfect_wins = perfect_wins + 1
             else:
                 count_perfect_wins = False
-                score = score - score_value
+                #score = score - score_value
 
             score_value = score_value + SCORE_STEP
 
@@ -157,7 +157,7 @@ def get_score_per_color_and_trump(hand: np.array, color: int, trumpType: int) ->
                     perfect_wins = perfect_wins + 1
             else:
                 count_perfect_wins = False
-                score = score - score_value
+                #score = score - score_value
 
             score_value = score_value + SCORE_STEP
 

@@ -7,7 +7,7 @@ from jass.player.player import Player
 import RuleBasedPlayer.rbp_score as rbp_score
 
 # Win Threshold: we want at least x score (otherwise we try to PUSH)
-SCORE_TRESHOLD = -10
+SCORE_TRESHOLD = 120
 
 def select_by_best_score(rnd: PlayerRound) -> int:
     """
