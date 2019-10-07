@@ -4,7 +4,7 @@ from jass.base.const import card_values
 from jass.base.player_round import PlayerRound
 import RuleBasedPlayer.rbp_score as score
 
-MINIMUM_POINTS_FOR_TRUMP = 2
+MINIMUM_POINTS_FOR_TRUMP = 5
 
 def play_card(rnd: PlayerRound) -> int:
     """
@@ -205,7 +205,7 @@ def check_perfect_card_unde(color: int, card_index: int, tick: np.array) -> bool
 
     best_card = True
 
-    for index in np.flip(score.BEST_OBE_INDEXES):
+    for index in score.BEST_OBE_INDEXES[::1]:
         if missing_cards[index] == 1:
             best_card = (card_index > index) #card has to have higher index when unde
 

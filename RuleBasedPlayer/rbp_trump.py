@@ -7,27 +7,21 @@ from jass.player.player import Player
 import RuleBasedPlayer.rbp_score as rbp_score
 
 # Win Threshold: we want at least x score (otherwise we try to PUSH)
-SCORE_TRESHOLD = 120
+SCORE_TRESHOLD = rbp_score.PERFECT_WINS_FACTOR * 5 #minimum 5 perfect wins
 
 def select_by_best_score(rnd: PlayerRound) -> int:
     """
     Target is to maximize the score
     """
+    best_trump = None
     score = -10000
 
-    best_trump, score = rbp_score.get_best_trump_and_score(rnd.hand)
+    for trump in range(0, 6):
+        tmp_score = rbp_score.calculate_score(rnd, trumpToCheck=trump)
 
-    #check obe
-    score_obe = rbp_score.get_score_obe(rnd.hand)
-    if score_obe > score:
-        best_trump = 4 #obe is best trump now
-        score = score_obe
-
-    #check onde
-    score_unde = rbp_score.get_score_onde(rnd.hand)
-    if score_unde > score:
-        best_trump = 5 #onde ist best trump now
-        score = score_unde
+        if tmp_score > score:
+            score = tmp_score
+            best_trump = trump
 
     if rnd.forehand is None:
         #We could push if we want
