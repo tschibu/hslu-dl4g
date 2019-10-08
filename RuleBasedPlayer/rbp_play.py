@@ -4,7 +4,7 @@ from jass.base.const import card_values
 from jass.base.player_round import PlayerRound
 import RuleBasedPlayer.rbp_score as score
 
-MINIMUM_POINTS_FOR_TRUMP = 5
+MINIMUM_POINTS_FOR_TRUMP = 7
 
 def play_card(rnd: PlayerRound) -> int:
     """
@@ -64,7 +64,7 @@ def play_card(rnd: PlayerRound) -> int:
         or card_to_play < 0
         or card_to_play > 35):
 
-        ValueError("card_to_play not set properly! Value should be within 0 and 35")
+        raise ValueError("card_to_play not set properly! Value should be within 0 and 35")
 
     return card_to_play
 
@@ -77,7 +77,8 @@ def check_is_first_player(rnd: PlayerRound) -> bool:
 def check_has_perfect_card(rnd: PlayerRound) -> bool:
     for color in range(0, 4):
         if(score.HIGHEST_CARD_PER_COLOR[color] == -1 or
-            score.NEXT_BEST_CARD_PER_COLOR[color] == -1):
+            score.NEXT_BEST_CARD_PER_COLOR[color] == -1 or
+            rnd.get_valid_cards()[score.HIGHEST_CARD_PER_COLOR[color]] != 1):
             continue
 
         if(score.HIGHEST_CARD_PER_COLOR[color]
@@ -117,7 +118,8 @@ def check_has_teammember_played(rnd: PlayerRound) -> bool:
     return True
 
 def check_round_has_still_trumps(rnd: PlayerRound) -> bool:
-    if score.CARDS_MISSING[(rnd.trump*9):(rnd.trump*9)+9].sum() != 9:
+    """check if missing card sum is 0 where the trump is"""
+    if score.CARDS_MISSING[(rnd.trump*9):(rnd.trump*9)+9].sum() != 0:
         return True
     return False
 
@@ -226,6 +228,10 @@ def play_perfect_win(rnd: PlayerRound) -> int:
             continue
 
         if score.HIGHEST_CARD_PER_COLOR[color] == score.NEXT_BEST_CARD_PER_COLOR[color]:
+            if rnd.get_valid_cards()[score.HIGHEST_CARD_PER_COLOR[color]] != 1:
+                print("Perfect win is not a valid card at the moment :(")
+                continue
+
             print("Playing perfect card: {}, playingTrump: {}, stillTrumps: {}".format(score.HIGHEST_CARD_PER_COLOR[color], (color == rnd.trump), check_round_has_still_trumps(rnd)))
             return score.HIGHEST_CARD_PER_COLOR[color]
 
@@ -238,9 +244,12 @@ def play_lowest_card_with_highest_score(rnd: PlayerRound) -> int:
     color_index = 0
 
     for s in score.SCORE_PER_COLOR:
-        if score.LOWEST_CARD_PER_COLOR[color_index] == -1:
+        if (score.LOWEST_CARD_PER_COLOR[color_index] == -1 or
+            rnd.get_valid_cards()[score.LOWEST_CARD_PER_COLOR[color_index]] != 1):
+
             color_index = color_index + 1
-            continue #no card in this color...continue...
+            print("No card of Color or not valid at the moment: {}".format(color_index))
+            continue #no card in this color or color not valid...continue...
 
         #check the score and set color to play
         if max_score < s:
@@ -266,9 +275,11 @@ def play_lowest_card_of_weakest_color(rnd: PlayerRound) -> int:
     color_index = 0
 
     for s in score.SCORE_PER_COLOR:
-        if score.LOWEST_CARD_PER_COLOR[color_index] == -1:
+        if (score.LOWEST_CARD_PER_COLOR[color_index] == -1 or
+           rnd.get_valid_cards()[score.LOWEST_CARD_PER_COLOR[color_index]] != 1):
+
             color_index = color_index + 1
-            print("No card of Color: {}".format(color_index))
+            print("No card of Color or not valid at the moment: {}".format(color_index))
             continue #no card in this color...continue...
 
         #check the score and set color to play
@@ -287,7 +298,7 @@ def play_lowest_card_of_weakest_color(rnd: PlayerRound) -> int:
 
 def play_last_valid_card(rnd: PlayerRound) -> int:
     for card in score.HIGHEST_CARD_PER_COLOR:
-        if card != -1:
+        if card != -1 and rnd.get_valid_cards()[card] == 1:
             return card
 
     raise ValueError("No valid card anymore!")
@@ -295,7 +306,7 @@ def play_last_valid_card(rnd: PlayerRound) -> int:
 
 def play_trump(rnd: PlayerRound) -> int:
     trump = score.HIGHEST_CARD_PER_COLOR[rnd.trump]
-    if trump == -1:
+    if trump == -1 or rnd.get_valid_cards()[trump] != 1:
         raise ValueError("Invalid Trump: Check first if trump is available!")
 
     print("Playing Trump! Trump: {}".format(trump))
