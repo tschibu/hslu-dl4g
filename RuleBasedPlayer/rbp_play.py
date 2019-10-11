@@ -10,15 +10,15 @@ def play_card(rnd: PlayerRound) -> int:
     """
     Play Cards according to doc/RuleBasedPlayerDecision
     """
-    if rnd.nr_tricks == 0:
-        #it's the first round -> calculate score for each color based on trump
-        score.calculate_score(rnd)
+    #if rnd.nr_tricks == 0:
+    #    #it's the first round -> calculate score for each color based on trump
+    score.calculate_score(rnd.get_valid_cards())
 
     #Actualize variables in score
-    print("Player: {}, Tricks: {}, CurrentTrick: {}".format(rnd.player, rnd.nr_tricks+1, rnd.current_trick))
-    print(score.calculate_highest_card_per_color(rnd))
-    print(score.calculate_lowest_card_per_color(rnd))
-    print(score.calculate_next_best_card(rnd))
+    print("Player: {}, Tricks: {}, CurrentTrick: {}, Trump: {}".format(rnd.player, rnd.nr_tricks+1, rnd.current_trick, rnd.trump))
+    print("Highest   Cards: {}".format(score.calculate_highest_card_per_color(rnd)))
+    print("Lowest    Cards: {}".format(score.calculate_lowest_card_per_color(rnd)))
+    print("Next Best Cards: {}".format(score.calculate_next_best_card(rnd)))
 
     card_to_play = None
 
@@ -77,8 +77,7 @@ def check_is_first_player(rnd: PlayerRound) -> bool:
 def check_has_perfect_card(rnd: PlayerRound) -> bool:
     for color in range(0, 4):
         if(score.HIGHEST_CARD_PER_COLOR[color] == -1 or
-            score.NEXT_BEST_CARD_PER_COLOR[color] == -1 or
-            rnd.get_valid_cards()[score.HIGHEST_CARD_PER_COLOR[color]] != 1):
+            score.NEXT_BEST_CARD_PER_COLOR[color] == -1):
             continue
 
         if(score.HIGHEST_CARD_PER_COLOR[color]
@@ -92,6 +91,7 @@ def check_has_perfect_card(rnd: PlayerRound) -> bool:
     return False
 
 def check_has_trump(rnd: PlayerRound) -> bool:
+    """check if trump available and valid in current round"""
     if rnd.trump < 4:
         if score.LOWEST_CARD_PER_COLOR[rnd.trump] != -1:
             return True
@@ -105,7 +105,7 @@ def check_enough_points(rnd: PlayerRound) -> bool:
             points = points + card_values[rnd.trump][card_index]
 
     if points >= MINIMUM_POINTS_FOR_TRUMP:
-        print("Enough points - play Trump! Points: {}".format(points))
+        print("Enough points in trick. Points: {}".format(points))
         return True
     else:
         return False
@@ -134,6 +134,8 @@ def check_perfect_card_from_teammember(rnd: PlayerRound) -> bool:
         ValueError("Partner has invalid Color!")
     if card_index_partner < 0 or card_index_partner > 8:
         ValueError("Partner has invalid Card!!")
+
+    print("Current Trick Winner: {}".format(rnd.trick_winner))
 
     if rnd.trump < 4:
         #check if still trumps
@@ -275,8 +277,7 @@ def play_lowest_card_of_weakest_color(rnd: PlayerRound) -> int:
     color_index = 0
 
     for s in score.SCORE_PER_COLOR:
-        if (score.LOWEST_CARD_PER_COLOR[color_index] == -1 or
-           rnd.get_valid_cards()[score.LOWEST_CARD_PER_COLOR[color_index]] != 1):
+        if score.LOWEST_CARD_PER_COLOR[color_index] == -1:
 
             color_index = color_index + 1
             print("No card of Color or not valid at the moment: {}".format(color_index))
@@ -305,8 +306,9 @@ def play_last_valid_card(rnd: PlayerRound) -> int:
     return -1
 
 def play_trump(rnd: PlayerRound) -> int:
+    #TODO check if highest or lowest trump
     trump = score.HIGHEST_CARD_PER_COLOR[rnd.trump]
-    if trump == -1 or rnd.get_valid_cards()[trump] != 1:
+    if trump == -1 or rnd.get_valid_cards()[score.HIGHEST_CARD_PER_COLOR[rnd.trump]] != 1:
         raise ValueError("Invalid Trump: Check first if trump is available!")
 
     print("Playing Trump! Trump: {}".format(trump))

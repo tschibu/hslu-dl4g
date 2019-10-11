@@ -20,10 +20,65 @@ LOWEST_CARD_PER_COLOR     = np.array([0, 0, 0, 0])
 HIGHEST_CARD_PER_COLOR    = np.array([0, 0, 0, 0])
 NEXT_BEST_CARD_PER_COLOR  = np.array([0, 0, 0, 0])
 
-CARDS_PLAYED = np.array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-CARDS_MISSING = np.array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+CARDS_PLAYED    = np.array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+CARDS_MISSING   = np.array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
 
-PERFECT_WINS_FACTOR = 30
+PERFECT_WINS_FACTOR = 1
+
+#Score per card
+def calculate_score(rnd: PlayerRound, trumpToCheck=None) -> int:
+    """trump can be given to check specific trump on a round otherwise the rnd trump is taken"""
+    trump = None
+    if trumpToCheck is not None:
+        trump = trumpToCheck
+    else:
+        trump = rnd.trump
+
+    if trump == 0:
+        #it's a D trump
+        SCORE_PER_COLOR[0] = get_score_per_color_and_trump(rnd.get_valid_cards(), 0, 0)
+        SCORE_PER_COLOR[1] = get_score_per_color_and_trump(rnd.get_valid_cards(), 1, 1)
+        SCORE_PER_COLOR[2] = get_score_per_color_and_trump(rnd.get_valid_cards(), 2, 1)
+        SCORE_PER_COLOR[3] = get_score_per_color_and_trump(rnd.get_valid_cards(), 3, 1)
+        return SCORE_PER_COLOR.sum()
+    elif trump == 1:
+        #it's a H trump
+        SCORE_PER_COLOR[0] = get_score_per_color_and_trump(rnd.get_valid_cards(), 0, 1)
+        SCORE_PER_COLOR[1] = get_score_per_color_and_trump(rnd.get_valid_cards(), 1, 0)
+        SCORE_PER_COLOR[2] = get_score_per_color_and_trump(rnd.get_valid_cards(), 2, 1)
+        SCORE_PER_COLOR[3] = get_score_per_color_and_trump(rnd.get_valid_cards(), 3, 1)
+        return SCORE_PER_COLOR.sum()
+    elif trump == 2:
+        #it's a S trump
+        SCORE_PER_COLOR[0] = get_score_per_color_and_trump(rnd.get_valid_cards(), 0, 1)
+        SCORE_PER_COLOR[1] = get_score_per_color_and_trump(rnd.get_valid_cards(), 1, 1)
+        SCORE_PER_COLOR[2] = get_score_per_color_and_trump(rnd.get_valid_cards(), 2, 0)
+        SCORE_PER_COLOR[3] = get_score_per_color_and_trump(rnd.get_valid_cards(), 3, 1)
+        return SCORE_PER_COLOR.sum()
+    elif trump == 3:
+        #it's a C trump
+        SCORE_PER_COLOR[0] = get_score_per_color_and_trump(rnd.get_valid_cards(), 0, 1)
+        SCORE_PER_COLOR[1] = get_score_per_color_and_trump(rnd.get_valid_cards(), 1, 1)
+        SCORE_PER_COLOR[2] = get_score_per_color_and_trump(rnd.get_valid_cards(), 2, 1)
+        SCORE_PER_COLOR[3] = get_score_per_color_and_trump(rnd.get_valid_cards(), 3, 0)
+        return SCORE_PER_COLOR.sum()
+    elif trump == 4:
+        #it's obe
+        SCORE_PER_COLOR[0] = get_score_per_color_and_trump(rnd.get_valid_cards(), 0, 1)
+        SCORE_PER_COLOR[1] = get_score_per_color_and_trump(rnd.get_valid_cards(), 1, 1)
+        SCORE_PER_COLOR[2] = get_score_per_color_and_trump(rnd.get_valid_cards(), 2, 1)
+        SCORE_PER_COLOR[3] = get_score_per_color_and_trump(rnd.get_valid_cards(), 3, 1)
+        return SCORE_PER_COLOR.sum()
+    elif trump == 5:
+        #it's unde
+        SCORE_PER_COLOR[0] = get_score_per_color_and_trump(rnd.get_valid_cards(), 0, 2)
+        SCORE_PER_COLOR[1] = get_score_per_color_and_trump(rnd.get_valid_cards(), 1, 2)
+        SCORE_PER_COLOR[2] = get_score_per_color_and_trump(rnd.get_valid_cards(), 2, 2)
+        SCORE_PER_COLOR[3] = get_score_per_color_and_trump(rnd.get_valid_cards(), 3, 2)
+        return SCORE_PER_COLOR.sum()
+    else:
+        raise ValueError("Wrong trump number! only works for 0 to 5 (D, H, S, C, Obe, Unde)")
+
 
 #Trump Selection
 def get_score_per_color_and_trump(hand: np.array, color: int, trumpType: int) -> int:
@@ -46,6 +101,7 @@ def get_score_per_color_and_trump(hand: np.array, color: int, trumpType: int) ->
                 score = score + score_value
 
                 if count_perfect_wins:
+                    score = score + (START_SCORE - score_value)
                     perfect_wins = perfect_wins + 1
             else:
                 count_perfect_wins = False
@@ -65,6 +121,7 @@ def get_score_per_color_and_trump(hand: np.array, color: int, trumpType: int) ->
                 score = score + score_value
 
                 if count_perfect_wins:
+                    score = score + (START_SCORE - score_value)
                     perfect_wins = perfect_wins + 1
             else:
                 count_perfect_wins = False
@@ -84,6 +141,7 @@ def get_score_per_color_and_trump(hand: np.array, color: int, trumpType: int) ->
                 score = score + score_value
 
                 if count_perfect_wins:
+                    score = score + (START_SCORE - score_value)
                     perfect_wins = perfect_wins + 1
             else:
                 count_perfect_wins = False
@@ -96,7 +154,7 @@ def get_score_per_color_and_trump(hand: np.array, color: int, trumpType: int) ->
 #Card calculations
 def calculate_highest_card_per_color(rnd: PlayerRound) -> np.array:
     for c in range(0, 4):
-        cards = rnd.hand[c*9:(c*9)+9]
+        cards = rnd.get_valid_cards()[c*9:(c*9)+9]
         if c == rnd.trump:
             #check highest trump
             HIGHEST_CARD_PER_COLOR[c] = get_highest_trump(c, cards)
@@ -111,7 +169,7 @@ def calculate_highest_card_per_color(rnd: PlayerRound) -> np.array:
 
 def calculate_lowest_card_per_color(rnd: PlayerRound) -> np.array:
     for c in range(0, 4):
-        cards = rnd.hand[c*9:(c*9)+9]
+        cards = rnd.get_valid_cards()[c*9:(c*9)+9]
         if c == rnd.trump:
             #check lowest trump
             LOWEST_CARD_PER_COLOR[c] = get_lowest_trump(c, cards)
@@ -155,60 +213,6 @@ def __get_card_index_by_color(color_index: int, cards_of_color: np.array, index_
 
     return -1 #no cards of this color anymore
 
-#Score per card
-def calculate_score(rnd: PlayerRound, trumpToCheck=None) -> int:
-    """trump can be given to check for best trump"""
-    trump = None
-    if trumpToCheck is not None:
-        trump = trumpToCheck
-    else:
-        trump = rnd.trump
-
-    if trump == 0:
-        #it's a D trump
-        SCORE_PER_COLOR[0] = get_score_per_color_and_trump(rnd.hand, 0, 0)
-        SCORE_PER_COLOR[1] = get_score_per_color_and_trump(rnd.hand, 1, 1)
-        SCORE_PER_COLOR[2] = get_score_per_color_and_trump(rnd.hand, 2, 1)
-        SCORE_PER_COLOR[3] = get_score_per_color_and_trump(rnd.hand, 3, 1)
-        return SCORE_PER_COLOR.sum()
-    elif trump == 1:
-        #it's a H trump
-        SCORE_PER_COLOR[0] = get_score_per_color_and_trump(rnd.hand, 0, 1)
-        SCORE_PER_COLOR[1] = get_score_per_color_and_trump(rnd.hand, 1, 0)
-        SCORE_PER_COLOR[2] = get_score_per_color_and_trump(rnd.hand, 2, 1)
-        SCORE_PER_COLOR[3] = get_score_per_color_and_trump(rnd.hand, 3, 1)
-        return SCORE_PER_COLOR.sum()
-    elif trump == 2:
-        #it's a S trump
-        SCORE_PER_COLOR[0] = get_score_per_color_and_trump(rnd.hand, 0, 1)
-        SCORE_PER_COLOR[1] = get_score_per_color_and_trump(rnd.hand, 1, 1)
-        SCORE_PER_COLOR[2] = get_score_per_color_and_trump(rnd.hand, 2, 0)
-        SCORE_PER_COLOR[3] = get_score_per_color_and_trump(rnd.hand, 3, 1)
-        return SCORE_PER_COLOR.sum()
-    elif trump == 3:
-        #it's a C trump
-        SCORE_PER_COLOR[0] = get_score_per_color_and_trump(rnd.hand, 0, 1)
-        SCORE_PER_COLOR[1] = get_score_per_color_and_trump(rnd.hand, 1, 1)
-        SCORE_PER_COLOR[2] = get_score_per_color_and_trump(rnd.hand, 2, 1)
-        SCORE_PER_COLOR[3] = get_score_per_color_and_trump(rnd.hand, 3, 0)
-        return SCORE_PER_COLOR.sum()
-    elif trump == 4:
-        #it's obe
-        SCORE_PER_COLOR[0] = get_score_per_color_and_trump(rnd.hand, 0, 1)
-        SCORE_PER_COLOR[1] = get_score_per_color_and_trump(rnd.hand, 1, 1)
-        SCORE_PER_COLOR[2] = get_score_per_color_and_trump(rnd.hand, 2, 1)
-        SCORE_PER_COLOR[3] = get_score_per_color_and_trump(rnd.hand, 3, 1)
-        return SCORE_PER_COLOR.sum()
-    elif trump == 5:
-        #it's unde
-        SCORE_PER_COLOR[0] = get_score_per_color_and_trump(rnd.hand, 0, 2)
-        SCORE_PER_COLOR[1] = get_score_per_color_and_trump(rnd.hand, 1, 2)
-        SCORE_PER_COLOR[2] = get_score_per_color_and_trump(rnd.hand, 2, 2)
-        SCORE_PER_COLOR[3] = get_score_per_color_and_trump(rnd.hand, 3, 2)
-        return SCORE_PER_COLOR.sum()
-    else:
-        raise ValueError("Wrong trump number! only works for 0 to 5 (D, H, S, C, Obe, Unde)")
-
 #Next best card
 def calculate_next_best_card(rnd: PlayerRound) -> np.array:
     cards_missing = get_missing_cards(rnd.tricks)
@@ -241,3 +245,6 @@ def get_missing_cards(tricks: np.array):
     missing_cards[missing_cards == -1] = 0
 
     return missing_cards
+
+
+#TODO: Problem -> perfect card schaut den current_tick nicht an (welche farbe muss gespielt werden)
