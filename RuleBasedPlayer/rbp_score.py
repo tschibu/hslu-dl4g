@@ -117,8 +117,8 @@ def get_score_per_color_and_trump(hand: np.array, color: int, trumpType: int) ->
         perfect_wins = 0
         count_perfect_wins = True
 
-        for v in cards_of_color:
-            if v == 1:
+        for i in range(0, BEST_OBE_INDEXES.size):
+            if cards_of_color[BEST_OBE_INDEXES[i]] == 1:
                 score = score + score_value
 
                 if count_perfect_wins:
@@ -136,8 +136,8 @@ def get_score_per_color_and_trump(hand: np.array, color: int, trumpType: int) ->
         perfect_wins = 0
         count_perfect_wins = True
 
-        for v in cards_of_color[::-1]:
-            if v == 1:
+        for i in range(BEST_OBE_INDEXES.size, 0):
+            if cards_of_color[BEST_OBE_INDEXES[i]] == 1:
                 score = score + score_value
 
                 if count_perfect_wins:

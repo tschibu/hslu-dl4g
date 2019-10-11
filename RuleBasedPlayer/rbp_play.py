@@ -12,7 +12,7 @@ def play_card(rnd: PlayerRound) -> int:
     """
     #if rnd.nr_tricks == 0:
     #    #it's the first round -> calculate score for each color based on trump
-    score.calculate_score(rnd.get_valid_cards())
+    score.calculate_score(rnd)
 
     #Actualize variables in score
     print("Player: {}, Tricks: {}, CurrentTrick: {}, Trump: {}".format(rnd.player, rnd.nr_tricks+1, rnd.current_trick, rnd.trump))
