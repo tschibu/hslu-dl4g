@@ -40,45 +40,47 @@ def calculate_score(rnd: PlayerRound, trumpToCheck=None) -> int:
         SCORE_PER_COLOR[1] = get_score_per_color_and_trump(rnd.get_valid_cards(), 1, 1)
         SCORE_PER_COLOR[2] = get_score_per_color_and_trump(rnd.get_valid_cards(), 2, 1)
         SCORE_PER_COLOR[3] = get_score_per_color_and_trump(rnd.get_valid_cards(), 3, 1)
-        return SCORE_PER_COLOR.sum()
+
     elif trump == 1:
         #it's a H trump
         SCORE_PER_COLOR[0] = get_score_per_color_and_trump(rnd.get_valid_cards(), 0, 1)
         SCORE_PER_COLOR[1] = get_score_per_color_and_trump(rnd.get_valid_cards(), 1, 0)
         SCORE_PER_COLOR[2] = get_score_per_color_and_trump(rnd.get_valid_cards(), 2, 1)
         SCORE_PER_COLOR[3] = get_score_per_color_and_trump(rnd.get_valid_cards(), 3, 1)
-        return SCORE_PER_COLOR.sum()
+
     elif trump == 2:
         #it's a S trump
         SCORE_PER_COLOR[0] = get_score_per_color_and_trump(rnd.get_valid_cards(), 0, 1)
         SCORE_PER_COLOR[1] = get_score_per_color_and_trump(rnd.get_valid_cards(), 1, 1)
         SCORE_PER_COLOR[2] = get_score_per_color_and_trump(rnd.get_valid_cards(), 2, 0)
         SCORE_PER_COLOR[3] = get_score_per_color_and_trump(rnd.get_valid_cards(), 3, 1)
-        return SCORE_PER_COLOR.sum()
+
     elif trump == 3:
         #it's a C trump
         SCORE_PER_COLOR[0] = get_score_per_color_and_trump(rnd.get_valid_cards(), 0, 1)
         SCORE_PER_COLOR[1] = get_score_per_color_and_trump(rnd.get_valid_cards(), 1, 1)
         SCORE_PER_COLOR[2] = get_score_per_color_and_trump(rnd.get_valid_cards(), 2, 1)
         SCORE_PER_COLOR[3] = get_score_per_color_and_trump(rnd.get_valid_cards(), 3, 0)
-        return SCORE_PER_COLOR.sum()
+
     elif trump == 4:
         #it's obe
         SCORE_PER_COLOR[0] = get_score_per_color_and_trump(rnd.get_valid_cards(), 0, 1)
         SCORE_PER_COLOR[1] = get_score_per_color_and_trump(rnd.get_valid_cards(), 1, 1)
         SCORE_PER_COLOR[2] = get_score_per_color_and_trump(rnd.get_valid_cards(), 2, 1)
         SCORE_PER_COLOR[3] = get_score_per_color_and_trump(rnd.get_valid_cards(), 3, 1)
-        return SCORE_PER_COLOR.sum()
+
     elif trump == 5:
         #it's unde
         SCORE_PER_COLOR[0] = get_score_per_color_and_trump(rnd.get_valid_cards(), 0, 2)
         SCORE_PER_COLOR[1] = get_score_per_color_and_trump(rnd.get_valid_cards(), 1, 2)
         SCORE_PER_COLOR[2] = get_score_per_color_and_trump(rnd.get_valid_cards(), 2, 2)
         SCORE_PER_COLOR[3] = get_score_per_color_and_trump(rnd.get_valid_cards(), 3, 2)
-        return SCORE_PER_COLOR.sum()
+
     else:
         raise ValueError("Wrong trump number! only works for 0 to 5 (D, H, S, C, Obe, Unde)")
 
+    print("Calculate Score - Trump: {}, ScorePerColor: {}".format(trump_strings_german_long[trump], SCORE_PER_COLOR))
+    return SCORE_PER_COLOR.sum()
 
 #Trump Selection
 def get_score_per_color_and_trump(hand: np.array, color: int, trumpType: int) -> int:
