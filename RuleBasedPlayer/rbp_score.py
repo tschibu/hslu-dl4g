@@ -10,8 +10,8 @@ from jass.player.player import Player
 BEST_TRUMP_INDEXES  = np.array([3, 5, 0, 1, 2, 4, 6, 7, 8])
 BEST_OBE_INDEXES    = np.array([0, 1, 2, 3, 4, 5, 6, 7, 8])
 
-START_SCORE = 9
-SCORE_STEP = -1
+START_SCORE = 1
+SCORE_STEP = 0
 
 # Variables used during playing
 #-------------------------------------D--H--S--C
@@ -101,11 +101,10 @@ def get_score_per_color_and_trump(hand: np.array, color: int, trumpType: int) ->
                 score = score + score_value
 
                 if count_perfect_wins:
-                    score = score + (START_SCORE - score_value)
                     perfect_wins = perfect_wins + 1
+
             else:
                 count_perfect_wins = False
-                #score = score - score_value
 
             score_value = score_value + SCORE_STEP
 
@@ -121,11 +120,10 @@ def get_score_per_color_and_trump(hand: np.array, color: int, trumpType: int) ->
                 score = score + score_value
 
                 if count_perfect_wins:
-                    score = score + (START_SCORE - score_value)
                     perfect_wins = perfect_wins + 1
+
             else:
                 count_perfect_wins = False
-                #score = score - score_value
 
             score_value = score_value + SCORE_STEP
 
@@ -141,11 +139,10 @@ def get_score_per_color_and_trump(hand: np.array, color: int, trumpType: int) ->
                 score = score + score_value
 
                 if count_perfect_wins:
-                    score = score + (START_SCORE - score_value)
                     perfect_wins = perfect_wins + 1
+
             else:
                 count_perfect_wins = False
-                #score = score - score_value
 
             score_value = score_value + SCORE_STEP
 
@@ -245,6 +242,3 @@ def get_missing_cards(tricks: np.array):
     missing_cards[missing_cards == -1] = 0
 
     return missing_cards
-
-
-#TODO: Problem -> perfect card schaut den current_tick nicht an (welche farbe muss gespielt werden)
