@@ -8,7 +8,7 @@ MINIMUM_POINTS_FOR_TRUMP = 7
 
 class RbpPlay():
     def __init__(self):
-        self.score_per_color = np.array([0, 0, 0, 0])
+        self.score_per_color = np.array([-1, -1, -1, -1])
         self.lowest_card_per_color = np.array([-1, -1, -1, -1])
         self.highest_card_per_color = np.array([-1, -1, -1, -1])
         self.best_next_card_per_color = np.array([-1, -1, -1, -1])
@@ -130,7 +130,7 @@ class RbpPlay():
 
     def _check_round_has_still_trumps(self, rnd: PlayerRound) -> bool:
         """check if missing card sum is 0 where the trump is"""
-        if score.get_missing_cards()[(rnd.trump*9):(rnd.trump*9)+9].sum() != 0:
+        if score.get_missing_cards(rnd.tricks)[(rnd.trump*9):(rnd.trump*9)+9].sum() != 0:
             return True
         return False
 
@@ -155,28 +155,28 @@ class RbpPlay():
                 print("There are still trumps!")
                 if color_of_card == rnd.trump:
                     print("Partner played trump!")
-                    return self._check_perfect_card_trump(color_of_card, card_index_partner, rnd.current_trick)
+                    return self._check_perfect_card_trump(color_of_card, card_index_partner, rnd.current_trick, score.get_missing_cards(rnd.tricks))
                 else:
                     print("Partner not played trump, but there are still some...")
                     return False #no perfect win when there are trumps
             else:
-                return self._check_perfect_card_obe(color_of_card, card_index_partner, rnd.current_trick)
+                return self._check_perfect_card_obe(color_of_card, card_index_partner, rnd.current_trick, score.get_missing_cards(rnd.tricks))
 
         if rnd.trump == 4:
-            return self._check_perfect_card_obe(color_of_card, card_index_partner, rnd.current_trick)
+            return self._check_perfect_card_obe(color_of_card, card_index_partner, rnd.current_trick, score.get_missing_cards(rnd.tricks))
 
         if rnd.trump == 5:
-            return self._check_perfect_card_unde(color_of_card, card_index_partner, rnd.current_trick)
+            return self._check_perfect_card_unde(color_of_card, card_index_partner, rnd.current_trick, score.get_missing_cards(rnd.tricks))
 
         raise ValueError("Perfect card check of Teammember failed!")
 
-    def _check_perfect_card_trump(self, color: int, card_index: int, tick: np.array) -> bool:
-        missing_cards = score.get_missing_cards[color*9:(color*9)+9]
+    def _check_perfect_card_trump(self, color: int, card_index: int, tick: np.array, missing_cards: np.array) -> bool:
+        missing_cards_of_color = missing_cards[color*9:(color*9)+9]
 
         best_card = True
 
         for index in score.BEST_TRUMP_INDEXES:
-            if missing_cards[index] == 1:
+            if missing_cards_of_color[index] == 1:
                 #found first missing card
                 if index == 3: #buur handling
                     return False #no higher card than buur
@@ -196,13 +196,13 @@ class RbpPlay():
 
         return best_card
 
-    def _check_perfect_card_obe(self, color: int, card_index: int, tick: np.array) -> bool:
-        missing_cards = score.get_missing_cards[color*9:(color*9)+9]
+    def _check_perfect_card_obe(self, color: int, card_index: int, tick: np.array, missing_cards: np.array) -> bool:
+        missing_cards_per_color = missing_cards[color*9:(color*9)+9]
 
         best_card = True
 
         for index in score.BEST_OBE_INDEXES:
-            if missing_cards[index] == 1:
+            if missing_cards_per_color[index] == 1:
                 best_card = (card_index < index) #card has to have lower index
 
         if best_card:
@@ -215,13 +215,13 @@ class RbpPlay():
 
         return best_card
 
-    def _check_perfect_card_unde(self, color: int, card_index: int, tick: np.array) -> bool:
-        missing_cards = score.get_missing_cards[color*9:(color*9)+9]
+    def _check_perfect_card_unde(self, color: int, card_index: int, tick: np.array, missing_cards: np.array) -> bool:
+        missing_cards_per_color = missing_cards[color*9:(color*9)+9]
 
         best_card = True
 
         for index in score.BEST_OBE_INDEXES[::1]:
-            if missing_cards[index] == 1:
+            if missing_cards_per_color[index] == 1:
                 best_card = (card_index > index) #card has to have higher index when unde
 
         if best_card:
@@ -245,7 +245,7 @@ class RbpPlay():
                     print("Perfect win is not a valid card at the moment :(")
                     continue
 
-                print("Playing perfect card: {}, playingTrump: {}, stillTrumps: {}".format(self.highest_card_per_color[color], (color == rnd.trump), self.check_round_has_still_trumps(rnd)))
+                print("Playing perfect card: {}, playingTrump: {}, stillTrumps: {}".format(self.highest_card_per_color[color], (color == rnd.trump), self._check_round_has_still_trumps(rnd)))
                 return self.highest_card_per_color[color]
 
         raise ValueError("Should never reach this line :/. Check for perfect win before calling!")
