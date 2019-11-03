@@ -1,4 +1,4 @@
 #!/bin/bash
 
 # Run RulesBasedPlayer Tests
-python -m unittest discover -s RuleBasedPlayer -p '*_test.py'
+python3 -m unittest discover -s RuleBasedPlayer -p '*_test.py'
