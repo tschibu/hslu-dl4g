@@ -11,8 +11,8 @@ BEST_TRUMP_INDEXES  = np.array([3, 5, 0, 1, 2, 4, 6, 7, 8]) #TODO: Hyperparamete
 BEST_OBE_INDEXES    = np.array([0, 1, 2, 3, 4, 5, 6, 7, 8]) #TODO: Hyperparameter
 BEST_UNDE_INDEXES   = np.array([8, 7, 6, 5, 4, 3, 2, 1, 0]) #TODO: Hyperparameter
 
-START_SCORE = 36 #TODO: Hyperparameter
-SCORE_STEP = -4 #TODO: Hyperparameter
+START_SCORE = 9 #TODO: Hyperparameter
+SCORE_STEP = (START_SCORE / 9) * -1 #linear curve
 
 #PERFECT_WINS_FACTOR = 9 #TODO: Hyperparameter
 
@@ -78,8 +78,8 @@ def calculate_score(rnd: PlayerRound, trumpToCheck=None) -> np.array:
     print("Calculate Score - Trump: {}, ScorePerColor: {}".format(trump_strings_german_long[trump], score_per_color))
     return score_per_color
 
-def calculate_score_of_card(current_score: int, score_to_add: int, count_perfect_wins: bool, count_all_cards=True) -> int:
-    if count_all_cards:
+def calculate_score_of_card(current_score: int, score_to_add: int, count_perfect_wins: bool, trump_card=False) -> int:
+    if trump_card:
         current_score = current_score + score_to_add
 
     if count_perfect_wins:
