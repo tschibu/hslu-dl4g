@@ -1,6 +1,10 @@
 # DL4G (Deep Learning for Games)
 HSLU - Lucerne University of Applied Sciences and Arts / Modul: DL4G (Deep Learning for Games)
 
+## Infos
+
+* Tournaments -> https://jass-server.abiz.ch/tournaments
+
 ## Input Koller
 
 * Round from PlayerRound
@@ -11,3 +15,24 @@ HSLU - Lucerne University of Applied Sciences and Arts / Modul: DL4G (Deep Learn
 ## Example Repo
 
 * https://github.com/amh38/DL4G/tree/master/jass-demo/my_jass
+
+## Uberspace
+
+### Setup
+
+* Deploy with ./deploy.sh script (change uberspace when it changes)
+
+* Get a Port
+    ```cmd
+    uberspace port add
+    ````
+* Route to Service
+    ```
+    uberspace web backend set / --http --port {PORT_FROM_ABOVE}
+    ```
+* Create Service -> https://manual.uberspace.de/en/daemons-supervisord.html?highlight=service
+
+### Infos 'tschinux' Uberspace
+
+* Port -> 46960 (automatically by 'uberspace port add')
+* Url -> https://tschinux.uber.space:46960/rule_based_player
