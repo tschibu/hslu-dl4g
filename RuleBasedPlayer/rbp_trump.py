@@ -7,7 +7,8 @@ from jass.player.player import Player
 import RuleBasedPlayer.rbp_score as rbp_score
 
 # Win Threshold: we want at least x score (otherwise we try to PUSH)
-SCORE_TRESHOLD = (rbp_score.START_SCORE * 3) + ((rbp_score.START_SCORE * 9) / 2) #minimum 5 perfect wins and 9 (each card has at least score 9)
+PERFECT_WINS = 3
+SCORE_TRESHOLD = (rbp_score.START_SCORE * PERFECT_WINS)
 
 def select_by_best_score(rnd: PlayerRound) -> int:
     """
@@ -23,7 +24,7 @@ def select_by_best_score(rnd: PlayerRound) -> int:
             score = tmp_score
             best_trump = trump
 
-    if rnd.forehand is None and False: #TODO remove force else
+    if rnd.forehand is None:
         #We could push if we want
         if score >= SCORE_TRESHOLD:
             print("Select Trump - Good Cards: {}, score: {}, cards: {}".format(trump_strings_german_long[best_trump], score, get_hand_str(rnd)))

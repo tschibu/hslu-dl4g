@@ -51,7 +51,7 @@ class RuleBasedPlayer(Player):
         """
 
         #TODO remove like random_choice selection
-        valid_cards = rnd.get_valid_cards()
-        return np.random.choice(np.flatnonzero(valid_cards))
+        #valid_cards = rnd.get_valid_cards()
+        #return np.random.choice(np.flatnonzero(valid_cards))
 
-        #return self.rbp_player.play_card(rnd)
+        return self.rbp_player.play_card(rnd)
