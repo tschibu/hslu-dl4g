@@ -1,9 +1,9 @@
 [submodule "jass-demo"]
 	path = jass-demo
-	url = https://gitlab.enterpriselab.ch/JassBot/jass-demo
+	url = git@gitlab.enterpriselab.ch:JassBot/jass-demo
 [submodule "jass-kit"]
 	path = jass-kit
-	url = https://gitlab.enterpriselab.ch/JassBot/jass-kit
+	url = git@gitlab.enterpriselab.ch:JassBot/jass-kit
 [submodule "jass-data"]
 	path = jass-data
 	url = git@gitlab.enterpriselab.ch:JassBot/jass-data.git
