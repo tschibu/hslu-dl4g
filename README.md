@@ -36,3 +36,13 @@ HSLU - Lucerne University of Applied Sciences and Arts / Modul: DL4G (Deep Learn
 
 * Port -> 46960 (automatically by 'uberspace port add')
 * Url -> https://tschinux.uber.space:46960/rule_based_player
+
+## EnterpriseLab Server
+
+### Infos
+
+```
+Hostname: dl4g-h19-tjineich.el.eee.intern
+Username with SUDO-Rights: tjineich
+Network: Internal
+```
