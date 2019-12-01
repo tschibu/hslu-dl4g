@@ -1,14 +1,21 @@
 import numpy as np
+import tensorflow as tf
 
 from jass.base.const import color_masks
 from jass.base.player_round import PlayerRound
 from jass.player.player import Player
+from tensorflow.keras.models import load_model
 
 
-class RandomChoicePlayer(Player):
+class DeepLearningPlayer(Player):
     """
-    Sample implementation of a player to play Jass.
+    Deep learning implementation of a player to play Jass.
     """
+
+    def __init__(self):
+        self.trumpModel = load_model('models/trumpV1.H5')
+        # self.trumpModel._make_predict_function()
+
     def select_trump(self, rnd: PlayerRound) -> int:
         """
         Player chooses a trump based on the given round information.
@@ -20,17 +27,14 @@ class RandomChoicePlayer(Player):
             selected trump
         """
         # select the trump with the largest number of cards
-        # print(rnd.hand)
-        # print(rnd.hand.shape)
+        if rnd.forehand is None:
+            forehand = 0
+        else:
+            forehand = 1
+        arr = np.array([np.append(rnd.hand, forehand)])
 
-        trump = 0
-        max_number_in_color = 0
-        for c in range(4):
-            number_in_color = (rnd.hand * color_masks[c]).sum()
-            if number_in_color > max_number_in_color:
-                max_number_in_color = number_in_color
-                trump = c
-        return trump
+        trump = self.trumpModel.predict(arr)
+        return np.argmax(trump)
 
     def play_card(self, rnd: PlayerRound) -> int:
         """
@@ -42,7 +46,6 @@ class RandomChoicePlayer(Player):
         Returns:
             card to play, int encoded
         """
-        # play random
 
         # get the valid cards to play
         valid_cards = rnd.get_valid_cards()
