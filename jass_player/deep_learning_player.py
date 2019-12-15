@@ -14,7 +14,7 @@ class DeepLearningPlayer(Player):
 
     def __init__(self):
         self.trumpModel = load_model('models/trumpV1.H5')
-        # self.trumpModel._make_predict_function()
+        self.playCardModel = load_model('models/card_prediction_model_V0.h5')
 
     def select_trump(self, rnd: PlayerRound) -> int:
         """
@@ -51,4 +51,34 @@ class DeepLearningPlayer(Player):
         valid_cards = rnd.get_valid_cards()
 
         # select a random card
-        return np.random.choice(np.flatnonzero(valid_cards))
+        player = self._one_hot(rnd.player, 4)
+        trump = self._one_hot(rnd.trump, 6)
+        current_trick = self._get_current_trick(rnd.tricks)
+        arr = np.array([np.append(rnd.hand, current_trick)])
+        arr = np.array([np.append(arr, player)])
+        arr = np.array([np.append(arr, trump)])
+        card_to_play = self.playCardModel.predict(arr)
+        return np.argmax(card_to_play)
+
+    def _one_hot(self, number, size):
+        """
+        One hot encoding for a single value. Output is float array of size size
+        Args:
+            number: number to one hot encode
+            size: length of the returned array
+        Returns:
+            array filled with 0.0 where index != number and 1.0 where index == number
+        """
+        result = np.zeros(size, dtype=np.int)
+        result[number] = 1
+        return result
+    
+    def _get_current_trick(self, tricks: np.array):
+        current_trick = np.array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+
+        for trick in tricks:
+            for card in trick:
+                if card != -1:
+                    current_trick[card] = 1
+
+        return current_trick
