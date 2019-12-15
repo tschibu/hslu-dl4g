@@ -46,3 +46,12 @@ Hostname: dl4g-h19-tjineich.el.eee.intern
 Username with SUDO-Rights: tjineich
 Network: Internal
 ```
+
+## ToDo
+
+# Remo
+* Train Play Card Model with all Data
+
+# Steve
+* Check which Trump Selection Model performs better (V2 or V0)
+* Setup Server
