@@ -20,7 +20,24 @@ HSLU - Lucerne University of Applied Sciences and Arts / Modul: DL4G (Deep Learn
 
 ### Setup
 
-* Deploy with ./deploy.sh script (change uberspace when it changes)
+* Deploy with ./deploy.sh {complete} script (change uberspace when it changes)
+
+* Upgrade old setuptools form uberspace `pip install --upgrade setuptools`
+
+* Install requirements.txt with `pip install -r requirements.txt`
+
+```
+tensorflow
+numpy
+keras
+jupyter
+pandas
+matplotlib
+flask
+
+```
+
+* Install jass-kid `cd `
 
 * Get a Port
     ```cmd
@@ -44,8 +61,21 @@ HSLU - Lucerne University of Applied Sciences and Arts / Modul: DL4G (Deep Learn
 ```
 Hostname: dl4g-h19-tjineich.el.eee.intern
 Username with SUDO-Rights: tjineich
+Password: same as the uberspace one...
 Network: Internal
 ```
+
+````
+sudo apt install virtualenv
+virtualenv -p python3 dl4g-env
+source dl4g-env/bin/activate
+echo "source dl4g-env/bin/activate" >> .bashrc
+
+--> run our `deploy.sh complete` script
+
+testing `python arena.py
+```
+
 
 ## ToDo
 

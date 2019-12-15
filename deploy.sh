@@ -1,7 +1,8 @@
 #!/bin/bash
 
-#copy everything to tschinux but not files/folders starting with a dot (e.g .git)
-deploy_user_host=tschinux@shoemaker.uberspace.de
+# copy everything to tschinux but not files/folders starting with a dot (e.g .git)
+# deploy_user_host=tschinux@shoemaker.uberspace.de
+deploy_user_host=tjineich@dl4g-h19-tjineich.el.eee.intern
 
 
 # relative to home directory unless preceded by a slash,
