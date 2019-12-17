@@ -89,8 +89,8 @@ tuner = RandomSearch(
 
 tuner.search(x=x_train.to_numpy(),
              y=y_train,
-             epochs=36,
-             batch_size=4096,
+             epochs=100,
+             batch_size=256,
              validation_data=(x_test.to_numpy(), y_test))
 
 tuner.search_space_summary()

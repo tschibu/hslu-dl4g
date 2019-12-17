@@ -13,7 +13,7 @@ class DeepLearningPlayer(Player):
     """
 
     def __init__(self):
-        self.trumpModel = load_model('models/trump_prediction_model_V8.h5') #'models/trumpV1.H5')
+        self.trumpModel = load_model('models/trump_prediction_model_Vnight_1.h5') #'models/trumpV1.H5')
         self.playCardModel = load_model('models/card_prediction_model_V0.h5')
 
     def select_trump(self, rnd: PlayerRound) -> int:

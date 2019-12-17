@@ -10,6 +10,7 @@ import logging
 from jass.player_service.player_service_app import PlayerServiceApp
 from random_choice_player import RandomChoicePlayer
 from rule_based_player import RuleBasedPlayer
+from jass_player.deep_learning_player import DeepLearningPlayer
 
 
 def create_app():
@@ -33,5 +34,7 @@ def create_app():
     app.add_player('rule_based_player', RuleBasedPlayer())
 
     app.add_player('random_choice_player', RandomChoicePlayer())
+
+    app.add_player('deep_learning_player', DeepLearningPlayer())
 
     return app
