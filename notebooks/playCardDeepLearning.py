@@ -7,8 +7,8 @@ from pathlib import Path
 
 # Data Preperation
 
-data_train = pd.read_csv('../data/play/play_train_rounds_merged.csv', header=None)
-data_test = pd.read_csv('../data/play/play_test_rounds_merged.csv', header=None)
+data_train = pd.read_csv('../data/play/final/play_train_rounds_merged_half.csv', header=None)
+data_test = pd.read_csv('../data/play/final/play_test_rounds_merged_half.csv', header=None)
 
 cards = [
 # Diamonds
@@ -75,6 +75,6 @@ print(f'Total Count  : {TOTAL_COUNT}')
 print(f'Correct Count: {CORRECT_COUNT}')
 print(f'Accuracy     : {accuracy}')
 
-version = "V1"
+version = "V2"
 
 model.save(f'../models/card_prediction_model_{version}.h5')

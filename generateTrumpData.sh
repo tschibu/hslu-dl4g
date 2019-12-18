@@ -9,9 +9,9 @@ else
     echo "Reuse generated files. Only filter and generate CSV"
 fi
 
-MOST_PER=0.8
-BEST_STD_PER=0.1
-BEST_MEAN_PER=0.2
+MOST_PER=0.90
+BEST_STD_PER=0.80
+BEST_MEAN_PER=0.50
 CURRENT_DIR=$(pwd)
 OUTPUT_DIR_DATA="$CURRENT_DIR/data/trump"
 OUTPUT_DIR_TEMP="${OUTPUT_DIR_DATA}/temp"

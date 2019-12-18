@@ -13,7 +13,7 @@ class DeepLearningPlayer(Player):
     """
 
     def __init__(self):
-        self.trumpModel = load_model('models/trump_prediction_model_Vnight_1.h5') #'models/trumpV1.H5')
+        self.trumpModel = load_model('models/trump_prediction_model_V10.h5') #'models/trumpV1.H5')....
         self.playCardModel = load_model('models/card_prediction_model_V0.h5')
 
     def select_trump(self, rnd: PlayerRound) -> int:
@@ -33,16 +33,19 @@ class DeepLearningPlayer(Player):
         #    forehand = 1
         #arr = np.array([np.append(rnd.hand, forehand)])
 
-        trump = self.trumpModel.predict(np.array([rnd.hand]))
-        trump_selected = int(np.argmax(trump))
+        trump_weights = self.trumpModel.predict(np.array([rnd.hand]))[0]
+        trump_selected = int(np.argmax(trump_weights))
         if trump_selected == 6 and rnd.forehand is None: #want to push and possible
-            #print(f'Try to push -> Forehand: {rnd.forehand}')
-            return int(10) #Push
-        elif trump_selected == 6:
-            #print(f'Cannot Push anymore -> Forehand: {rnd.forehand}, Possible Trumps: {trump[0:5]}')
-            return int(np.argmax(trump[0:5]))
+            #print(f'Can Push -> Forehand: {rnd.forehand}')
+            return self._assert_if_wrong_trump(int(10), rnd) #Push
 
-        return int(np.argmax(trump))
+        elif trump_selected == 6:
+            best_without_pushing = int(np.argmax(trump_weights[0:5]))
+            #print(f'Cannot Push anymore -> Best without Push: {best_without_pushing}, Possible Trumps: {trump_weights[0:5]}')
+            return self._assert_if_wrong_trump(best_without_pushing, rnd)
+
+        #print(f'Select Trump: {trump_selected}')
+        return self._assert_if_wrong_trump(trump_selected, rnd)
 
     def play_card(self, rnd: PlayerRound) -> int:
         """
@@ -94,3 +97,15 @@ class DeepLearningPlayer(Player):
                     current_trick[card] = 1
 
         return current_trick
+
+    def _assert_if_wrong_trump(self, trump, rnd):
+        need_to_select = rnd.forehand is not None
+
+        if not isinstance(trump, int):
+            print("Trump not Int!")
+        elif (trump < 0 or trump > 5) and need_to_select:
+            print(f'Should select! Trump not in Range {trump}')
+        elif (trump < 0 or trump > 5) and trump != 10:
+            print(f'Trump not 0-5 or 10: Trump: {trump}')
+
+        return trump

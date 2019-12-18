@@ -9,8 +9,8 @@ from pathlib import Path
 from kerastuner import HyperModel
 from kerastuner.tuners import RandomSearch
 
-data_train = pd.read_csv('../data/trump/train_rounds_filtered_merged.csv', header=None)
-data_test = pd.read_csv('../data/trump/test_rounds_filtered_merged.csv', header=None)
+data_train = pd.read_csv('../data/play/final/play_train_rounds_merged_half.csv', header=None)
+data_test = pd.read_csv('../data/play/final/play_test_rounds_merged_half.csv', header=None)
 
 #Data Preperation
 cards = [
@@ -24,12 +24,12 @@ cards = [
 'CA','CK','CQ','CJ','C10','C9','C8','C7','C6'
 ]
 
-forehand = ['forehand']
-trump = ['trump']
+player = ['P0','P1','P2','P3']
+trump = ['D','H','S','C','O','U']
+played_card = ['PlayedCard']
 
-
-data_train.columns = cards + forehand + trump
-data_test.columns = cards + forehand + trump
+data_train.columns = cards + cards + player + trump + played_card
+data_test.columns = cards + cards + player + trump + played_card
 print(f'Raw Data Count -> Train Data: {data_train.shape}, Test Data: {data_test.shape}')
 
 data_train = data_train.drop_duplicates(keep="first")
@@ -41,11 +41,8 @@ print(f'Duplicated Hands in Test: {any(data_test[0:36].duplicated())}')
 
 #Create Data to train an to test
 
-x_train = data_train.drop('trump', axis='columns', inplace=False)
-x_train = x_train.drop('forehand', axis='columns', inplace=False)
-
-x_test = data_test.drop('trump', axis='columns', inplace=False)
-x_test = x_test.drop('forehand', axis='columns', inplace=False)
+x_train = data_train.drop('PlayedCard', axis='columns', inplace=False)
+x_test = data_test.drop('PlayedCard', axis='columns', inplace=False)
 
 #Training
 class MyHyperModel(HyperModel):
@@ -55,14 +52,14 @@ class MyHyperModel(HyperModel):
 
     def build(self, hp):
         model = keras.Sequential()
-        model.add(keras.layers.Dense(36, activation='relu', input_shape=[36]))
+        model.add(keras.layers.Dense(82, activation='relu', input_shape=[82]))
         for i in range(hp.Int('num_layers', 3, 9)):
             model.add(keras.layers.Dense(units=hp.Int('units_' + str(i),
                                                 min_value=16,
-                                                max_value=72,
+                                                max_value=184,
                                                 step=1),
                                         activation='relu'))
-        model.add(keras.layers.Dense(7, activation='softmax'))
+        model.add(keras.layers.Dense(36, activation='softmax'))
         model.compile(
             optimizer=keras.optimizers.Adam(
                 hp.Choice('learning_rate',
@@ -72,11 +69,11 @@ class MyHyperModel(HyperModel):
 
         return model
 
-y_train_label = data_train['trump']
-y_train = keras.utils.to_categorical(y_train_label, num_classes=7)
+y_train_label = data_train['PlayedCard']
+y_train = keras.utils.to_categorical(y_train_label, num_classes=82)
 
-y_test_label = data_test['trump']
-y_test = keras.utils.to_categorical(y_test_label, num_classes=7)
+y_test_label = data_test['PlayedCard']
+y_test = keras.utils.to_categorical(y_test_label, num_classes=36)
 
 hypermodel = MyHyperModel()
 
@@ -90,7 +87,7 @@ tuner = RandomSearch(
 tuner.search(x=x_train.to_numpy(),
              y=y_train,
              epochs=10,
-             batch_size=1024,
+             batch_size=2048,
              validation_data=(x_test.to_numpy(), y_test))
 
 tuner.search_space_summary()

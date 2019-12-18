@@ -51,13 +51,18 @@ y_train = keras.utils.to_categorical(y_train_label, num_classes=7)
 
 model = keras.Sequential()
 model.add(keras.layers.Dense(36, activation='relu', input_shape=[36]))
-model.add(keras.layers.Dense(22, activation='relu'))
-model.add(keras.layers.Dense(16, activation='relu'))
+model.add(keras.layers.Dense(42, activation='relu'))
+model.add(keras.layers.Dense(69, activation='relu'))
+model.add(keras.layers.Dense(64, activation='relu'))
+model.add(keras.layers.Dense(35, activation='relu'))
+model.add(keras.layers.Dense(35, activation='relu'))
+model.add(keras.layers.Dense(18, activation='relu'))
+model.add(keras.layers.Dense(29, activation='relu'))
 model.add(keras.layers.Dense(7, activation='softmax'))
 model.compile(loss='categorical_crossentropy',
               optimizer='sgd', #'rmsprop', 'sgd', Adadelta()
               metrics=['accuracy'])
-history = model.fit(x_train, y_train, epochs=70, batch_size=100, shuffle=True)
+history = model.fit(x_train, y_train, epochs=100, batch_size=256, shuffle=True)
 
 model.summary()
 #print(model.get_weights())
@@ -94,7 +99,7 @@ print(f'Accuracy      : {accuracy}')
 #V7	      100	     300	    2 relu (22, 16) & 1 softmax	                0.8850	0.6307	    0.6210	No
 #V8	      100	     300        1 relu (20) & 1 softmax	                    0.8634  0.6277      0.6240  No
 #V9	      100	     3000	    2 relu (22, 16) & 1 softmax	                0.8814	0.6228	    0.6231	No
-#V10	  70	     100	    2 relu (22, 16) & 1 softmax	                		    	No
+#V10	  100	     256	    Keras Tuner Output (see doc)	            0.8313  0.6400      0.6376  No
 
 version = "V10"
 
