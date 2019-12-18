@@ -61,6 +61,17 @@ flask
 
 * Port -> 49960 (automatically by 'uberspace port add')
 * Url -> http://tschinu2.uber.space:49960/deep_learning_player
+* Service steuern:
+```bash
+supervisorctl status
+supervisorctl stop jass-service
+supervisorctl start jass-service
+```
+* Check Port
+```bash
+uberspace web backend list
+```
+
 
 ## EnterpriseLab Server
 
@@ -93,3 +104,13 @@ testing `python arena.py
 # Steve
 * Check which Trump Selection Model performs better (V2 or V0)
 * Setup Server
+
+
+
+## AWS
+
+IP: 52.59.191.250
+
+Player: http://52.59.191.250:5005/deep_learning_player
+
+started with tmux
