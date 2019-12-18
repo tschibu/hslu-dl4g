@@ -32,9 +32,9 @@ done
 
 # convert to playerround
 cd $JASSKIT_BIN
-python convert_rounds_to_player_rounds.py --output player_rnd_play_train --output_dir $TEMP_TRAIN $OUTPUT_DIR_TEMP/play_train.txt
-python convert_rounds_to_player_rounds.py --output player_rnd_play_test --output_dir $TEMP_TEST $OUTPUT_DIR_TEMP/play_test.txt
-python convert_rounds_to_player_rounds.py --output player_rnd_play_val --output_dir $TEMP_VAL $OUTPUT_DIR_TEMP/play_val.txt
+python3 convert_rounds_to_player_rounds.py --output player_rnd_play_train --output_dir $TEMP_TRAIN $OUTPUT_DIR_TEMP/play_train.txt
+python3 convert_rounds_to_player_rounds.py --output player_rnd_play_test --output_dir $TEMP_TEST $OUTPUT_DIR_TEMP/play_test.txt
+python3 convert_rounds_to_player_rounds.py --output player_rnd_play_val --output_dir $TEMP_VAL $OUTPUT_DIR_TEMP/play_val.txt
 
 # merge playerround to one big file
 # Training data
@@ -52,6 +52,6 @@ for file in $(find $TEMP_VAL -type f | sort); do
   cat $file >> "$OUTPUT_DIR_TEMP/play_val_rounds_merged.txt"
 done
 
-python convert_player_rounds_to_csv.py --output_dir $OUTPUT_DIR_DATA $OUTPUT_DIR_TEMP/play_test_rounds_merged.txt
-python convert_player_rounds_to_csv.py --output_dir $OUTPUT_DIR_DATA $OUTPUT_DIR_TEMP/play_val_rounds_merged.txt
-python convert_player_rounds_to_csv.py --output_dir $OUTPUT_DIR_DATA $OUTPUT_DIR_TEMP/play_train_rounds_merged.txt
+python3 convert_player_rounds_to_csv.py --output_dir $OUTPUT_DIR_DATA $OUTPUT_DIR_TEMP/play_test_rounds_merged.txt
+python3 convert_player_rounds_to_csv.py --output_dir $OUTPUT_DIR_DATA $OUTPUT_DIR_TEMP/play_val_rounds_merged.txt
+python3 convert_player_rounds_to_csv.py --output_dir $OUTPUT_DIR_DATA $OUTPUT_DIR_TEMP/play_train_rounds_merged.txt

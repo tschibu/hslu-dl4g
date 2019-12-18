@@ -20,7 +20,7 @@ def main():
     deep_learning_player = DeepLearningPlayer()
 
     arena.set_players(deep_learning_player, random_choice_player, deep_learning_player, random_choice_player)
-    arena.nr_games_to_play = 3300
+    arena.nr_games_to_play = 1000
     print('Playing {} games'.format(arena.nr_games_to_play))
     arena.play_all_games()
     total_games = arena.nr_wins_team_0 + arena.nr_wins_team_1 + arena.nr_draws

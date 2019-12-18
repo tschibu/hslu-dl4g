@@ -37,22 +37,30 @@ flask
 
 ```
 
-* Install jass-kid `cd `
+* Install jass-kit `cd `
 
 * Get a Port
     ```cmd
     uberspace port add
     ````
 * Route to Service
-    ```
+    ```cmd
     uberspace web backend set / --http --port {PORT_FROM_ABOVE}
     ```
 * Create Service -> https://manual.uberspace.de/en/daemons-supervisord.html?highlight=service
+    ```cmd
+    [tschinu2@holmes dl4g]$ cat ~/etc/services.d/jass-service.ini
+    [program:jass-service]
+    command=/home/tschinu2/dl4g/run_service.sh
+    autostart=yes
+    autorestart=yes
+    [tschinu2@holmes dl4g]$
+    ```
 
 ### Infos 'tschinux' Uberspace
 
-* Port -> 46960 (automatically by 'uberspace port add')
-* Url -> https://tschinux.uber.space:46960/rule_based_player
+* Port -> 49960 (automatically by 'uberspace port add')
+* Url -> http://tschinu2.uber.space:49960/deep_learning_player
 
 ## EnterpriseLab Server
 

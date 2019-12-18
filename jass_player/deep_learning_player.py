@@ -13,7 +13,7 @@ class DeepLearningPlayer(Player):
     """
 
     def __init__(self):
-        self.trumpModel = load_model('models/trumpV1.H5')
+        self.trumpModel = load_model('models/trump_prediction_model_Vnight_1.h5') #'models/trumpV1.H5')
         self.playCardModel = load_model('models/card_prediction_model_V0.h5')
 
     def select_trump(self, rnd: PlayerRound) -> int:
@@ -27,14 +27,22 @@ class DeepLearningPlayer(Player):
             selected trump
         """
         # select the trump with the largest number of cards
-        if rnd.forehand is None:
-            forehand = 0
-        else:
-            forehand = 1
-        arr = np.array([np.append(rnd.hand, forehand)])
+        #if rnd.forehand is None:
+        #    forehand = 0
+        #else:
+        #    forehand = 1
+        #arr = np.array([np.append(rnd.hand, forehand)])
 
-        trump = self.trumpModel.predict(arr)
-        return np.argmax(trump)
+        trump = self.trumpModel.predict(np.array([rnd.hand]))
+        trump_selected = int(np.argmax(trump))
+        if trump_selected == 6 and rnd.forehand is None: #want to push and possible
+            #print(f'Try to push -> Forehand: {rnd.forehand}')
+            return int(10) #Push
+        elif trump_selected == 6:
+            #print(f'Cannot Push anymore -> Forehand: {rnd.forehand}, Possible Trumps: {trump[0:5]}')
+            return int(np.argmax(trump[0:5]))
+
+        return int(np.argmax(trump))
 
     def play_card(self, rnd: PlayerRound) -> int:
         """
@@ -54,11 +62,15 @@ class DeepLearningPlayer(Player):
         player = self._one_hot(rnd.player, 4)
         trump = self._one_hot(rnd.trump, 6)
         current_trick = self._get_current_trick(rnd.tricks)
-        arr = np.array([np.append(rnd.hand, current_trick)])
+        arr = np.array([np.append(valid_cards, current_trick)])
         arr = np.array([np.append(arr, player)])
         arr = np.array([np.append(arr, trump)])
-        card_to_play = self.playCardModel.predict(arr)
-        return np.argmax(card_to_play)
+        card_to_play = int(np.argmax(self.playCardModel.predict(arr)))
+
+        if valid_cards[card_to_play] == 1: #valid card
+            return card_to_play
+        else:
+            return int(np.nonzero(valid_cards == 1)[0][0])
 
     def _one_hot(self, number, size):
         """
@@ -72,7 +84,7 @@ class DeepLearningPlayer(Player):
         result = np.zeros(size, dtype=np.int)
         result[number] = 1
         return result
-    
+
     def _get_current_trick(self, tricks: np.array):
         current_trick = np.array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
 
