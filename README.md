@@ -109,8 +109,13 @@ testing `python arena.py
 
 ## AWS
 
-IP: 52.59.191.250
+IP: 3.122.231.89
+ssh -i "DL4G.pem" ubuntu@ec2-3-122-231-89.eu-central-1.compute.amazonaws.com
 
-Player: http://52.59.191.250:5005/deep_learning_player
+
+Player: http://3.122.231.89:5005/deep_learning_player
 
 started with tmux
+
+Start game: tmux ./~/dl4g/run_service_aws.sh -> cntr+b d
+Session killen: tmux kill-ses -t <session>
